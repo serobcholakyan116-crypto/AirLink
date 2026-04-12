@@ -9,17 +9,29 @@
 
 #include "sim/SimRepository.hpp"
 #include "sim/SimManager.hpp"
+#include "sim/SimPolicyManager.hpp"
+#include "sim/SimAudit.hpp"
+#include "sim/SimAnalytics.hpp"
 
 int main() {
     SystemConfig config;
 
-    // SIM system initialization
+    // SIM subsystem
     SimRepository simRepo;
     SimManager simManager(simRepo);
+    SimPolicyManager policyManager;
+    SimAudit audit;
+    SimAnalytics analytics;
 
-    // Register and activate a SIM for demonstration
+    // Register SIM
     simManager.registerSim("SIM001", "AirLinkCarrier");
     simManager.activateSim("SIM001");
+
+    // Apply policy
+    policyManager.setPolicy({"SIM001", 3, 50, true});
+
+    // Record audit
+    audit.record({"SIM001", "Activated", "2026-04-12T12:00:00Z"});
 
     // Core system
     ConnectionManager connectionManager(config);
@@ -29,8 +41,11 @@ int main() {
 
     std::cout << "AirLink system initialized." << std::endl;
 
-    // Example authentication
+    // Authenticate
     authService.authenticateDevice("deviceA", "SIM001");
+
+    // Analytics
+    analytics.recordSessionStart("SIM001");
 
     monitor.startMonitoring();
     signalHandler.monitorSignalHealth();
