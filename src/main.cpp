@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 
 #include "common/SystemConfig.hpp"
@@ -12,6 +14,11 @@
 #include "sim/SimPolicyManager.hpp"
 #include "sim/SimAudit.hpp"
 #include "sim/SimAnalytics.hpp"
+#include "sim/SimQoS.hpp"
+#include "sim/SimRoaming.hpp"
+#include "sim/SimBilling.hpp"
+#include "sim/SimTenant.hpp"
+#include "sim/SimThreatDetection.hpp"
 
 int main() {
     SystemConfig config;
@@ -22,16 +29,25 @@ int main() {
     SimPolicyManager policyManager;
     SimAudit audit;
     SimAnalytics analytics;
+    SimBilling billing;
+    SimTenant tenants;
+    SimThreatDetection threatDetection;
 
     // Register SIM
     simManager.registerSim("SIM001", "AirLinkCarrier");
     simManager.activateSim("SIM001");
 
-    // Apply policy
+    // Policies
     policyManager.setPolicy({"SIM001", 3, 50, true});
+    SimQoS::setBandwidthLimit("SIM001", 50);
+    SimRoaming::setRoamingAllowed("SIM001", true);
+    tenants.assignTenant("SIM001", "TenantA");
 
-    // Record audit
+    // Audit
     audit.record({"SIM001", "Activated", "2026-04-12T12:00:00Z"});
+
+    // Threat detection
+    threatDetection.recordEvent("SIM001", "normal_activity");
 
     // Core system
     ConnectionManager connectionManager(config);
@@ -46,6 +62,11 @@ int main() {
 
     // Analytics
     analytics.recordSessionStart("SIM001");
+
+    // Billing
+    billing.addUsage("SIM001", 500); // 500 MB
+
+    std::cout << "SIM001 bill: $" << billing.calculateBill("SIM001") << std::endl;
 
     monitor.startMonitoring();
     signalHandler.monitorSignalHealth();
