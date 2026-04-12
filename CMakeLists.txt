@@ -8,3 +8,6 @@ include_directories(src)
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(AirLink ${SOURCES})
+
+
+(This already auto‑includes the new SIM files because they’re in src/.)
