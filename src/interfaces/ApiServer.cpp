@@ -10,8 +10,5 @@ void ApiServer::start() {
     std::cout << "  POST /sim/register" << std::endl;
     std::cout << "  POST /sim/activate" << std::endl;
     std::cout << "  POST /sim/deactivate" << std::endl;
-}
-
-void ApiServer::stop() {
-    std::cout << "API Server stopped." << std::endl;
+    std::cout << "  GET  /sim/analytics" << std::endl;
 }
