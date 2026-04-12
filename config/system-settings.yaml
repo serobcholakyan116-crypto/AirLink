@@ -1,0 +1,6 @@
+system:
+  name: AirLink
+  environment: production
+  logging_level: info
+  max_concurrent_sessions: 10000
+  health_check_interval_seconds: 30
