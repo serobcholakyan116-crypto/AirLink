@@ -1,0 +1,18 @@
+rbac:
+  roles:
+    - name: admin
+      permissions:
+        - manage_system
+        - manage_policies
+        - view_logs
+    - name: operator
+      permissions:
+        - manage_policies
+        - view_metrics
+    - name: auditor
+      permissions:
+        - view_logs
+        - view_metrics
+policies:
+  session_timeout_minutes: 60
+  max_devices_per_user: 3
