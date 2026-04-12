@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SIM Management — AirLink</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>SIM Management</h1>
+  </header>
+
+  <main class="layout">
+    <section class="card">
+      <h2>Register SIM</h2>
+      <input id="sim-id" placeholder="SIM ID" />
+      <input id="sim-carrier" placeholder="Carrier" />
+      <button id="register-btn">Register</button>
+    </section>
+
+    <section class="card">
+      <h2>Activate SIM</h2>
+      <input id="activate-id" placeholder="SIM ID" />
+      <button id="activate-btn">Activate</button>
+    </section>
+
+    <section class="card">
+      <h2>Deactivate SIM</h2>
+      <input id="deactivate-id" placeholder="SIM ID" />
+      <button id="deactivate-btn">Deactivate</button>
+    </section>
+  </main>
+
+  <script src="sim.js"></script>
+</body>
+</html>
