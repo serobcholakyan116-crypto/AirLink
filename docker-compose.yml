@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  controller:
+    build: .
+    container_name: montebello-controller
+    restart: always
+    ports:
+      - "8080:8080"
+
+  backend:
+    build: ./cloud/backend
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build: ./cloud/frontend
+    ports:
+      - "5173:5173"
