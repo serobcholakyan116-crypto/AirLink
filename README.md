@@ -104,3 +104,39 @@ If you paste those in, you’ll have a repo that:
 • Builds a binary (controller_main)
 • Runs a live control loop (on synthetic data)
 • Has configs + planning + scripts all aligned
+# Citywide WiFi Control Platform
+
+A scalable, software-defined control system for deploying and managing
+free municipal WiFi networks.
+
+## 🚀 Vision
+
+Enable cities to deploy open, secure, and high-performance WiFi
+as public infrastructure.
+
+## 🧠 Core Features
+
+- Real-time RF optimization
+- Vendor-agnostic AP control
+- Cloud-based monitoring
+- Multi-city scaling
+
+## 🏗️ Architecture
+
+- C++ Controller Core
+- API-driven Device Integration
+- Cloud Dashboard (React + Node)
+- Dockerized Deployment
+
+## 🌍 Use Cases
+
+- Municipal WiFi
+- Smart Cities
+- Emergency Connectivity
+- Digital Equity Programs
+
+## 💡 Business Model
+
+- SaaS controller licensing
+- City infrastructure contracts
+- Managed network services
