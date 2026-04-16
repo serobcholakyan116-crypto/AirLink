@@ -1,29 +1,49 @@
 #include "Orchestrator.h"
 
-#include "../southbound/LoggingAdapter.cpp"  // safe default adapter
+#include "../southbound/LoggingAdapter.h"
+#include "../southbound/UniFiAdapter.h"
 
 #include <iostream>
 #include <thread>
 #include <chrono>
 
+// (Optional) simple HTTP stub placeholder
+void Orchestrator::sendStateToCloud() {
+    // In real deployment:
+    // POST /api/state to Node backend
+    std::cout << "[CLOUD] State synced (" << state.aps.size() << " APs)" << std::endl;
+}
+
 Orchestrator::Orchestrator()
-    : running(false) {}
+    : running(false),
+      use_unifi(false) {}
+
+void Orchestrator::configure(bool enable_unifi,
+                             const std::string& url,
+                             const std::string& key) {
+    use_unifi = enable_unifi;
+    unifi_url = url;
+    unifi_key = key;
+}
 
 void Orchestrator::initialize() {
-    std::cout << "[INIT] Starting controller initialization..." << std::endl;
+    std::cout << "[INIT] Initializing controller..." << std::endl;
 
-    // Initialize southbound adapter (safe default)
-    adapter = std::make_unique<LoggingAdapter>();
+    // Choose adapter
+    if (use_unifi) {
+        std::cout << "[INIT] Using UniFi adapter" << std::endl;
+        adapter = std::make_unique<UniFiAdapter>(unifi_url, unifi_key);
+    } else {
+        std::cout << "[INIT] Using Logging adapter (safe mode)" << std::endl;
+        adapter = std::make_unique<LoggingAdapter>();
+    }
 
-    // Inject adapter into scheduler
     scheduler = std::make_unique<Scheduler>(adapter.get());
 
-    std::cout << "[INIT] Adapter and scheduler initialized." << std::endl;
-
-    // Initialize digital twin with empty state
+    // Initialize state
     twin.update(state);
 
-    std::cout << "[INIT] Digital twin initialized." << std::endl;
+    std::cout << "[INIT] Initialization complete." << std::endl;
 }
 
 void Orchestrator::run() {
@@ -33,37 +53,37 @@ void Orchestrator::run() {
 
     while (running) {
         try {
-            // 1. Telemetry ingestion
+            // 1. Telemetry
             telemetry.ingest(state);
-            std::cout << "[LOOP] Telemetry ingested." << std::endl;
+            std::cout << "[STEP] Telemetry updated" << std::endl;
 
-            // 2. Spectrum analysis
+            // 2. Spectrum
             auto scores = spectrum.analyze(state);
-            std::cout << "[LOOP] Spectrum analyzed." << std::endl;
+            std::cout << "[STEP] Spectrum analyzed" << std::endl;
 
-            // 3. Interference classification
+            // 3. Interference
             auto interference_map = classifier.classify(scores);
-            std::cout << "[LOOP] Interference classified." << std::endl;
+            std::cout << "[STEP] Interference classified" << std::endl;
 
-            // 4. Optimization decisions
+            // 4. Optimize
             auto decisions = optimizer.optimize(state, interference_map);
-            std::cout << "[LOOP] Optimization complete. Decisions: "
+            std::cout << "[STEP] Decisions generated: "
                       << decisions.size() << std::endl;
 
-            // 5. Schedule + apply (via adapter)
+            // 5. Apply
             scheduler->schedule(decisions);
-            std::cout << "[LOOP] Actions scheduled." << std::endl;
+            std::cout << "[STEP] Actions applied" << std::endl;
 
-            // 6. Update digital twin
+            // 6. Update twin
             twin.update(state);
-            std::cout << "[LOOP] Digital twin updated." << std::endl;
+
+            // 7. Cloud sync
+            sendStateToCloud();
 
         } catch (const std::exception& e) {
-            std::cerr << "[ERROR] Exception in control loop: "
-                      << e.what() << std::endl;
+            std::cerr << "[ERROR] " << e.what() << std::endl;
         }
 
-        // Control loop interval (from config later if needed)
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
 
@@ -71,6 +91,6 @@ void Orchestrator::run() {
 }
 
 void Orchestrator::stop() {
-    std::cout << "[STOP] Shutdown signal received." << std::endl;
+    std::cout << "[STOP] Shutdown requested." << std::endl;
     running = false;
 }
