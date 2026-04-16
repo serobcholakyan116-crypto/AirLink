@@ -1,8 +1,8 @@
 #include "orchestrator/Orchestrator.h"
 
 int main() {
-    Orchestrator o;
-    o.initialize();
-    o.run();
+    Orchestrator orchestrator;
+    orchestrator.initialize();
+    orchestrator.run();
     return 0;
 }
