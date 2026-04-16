@@ -1,0 +1,5 @@
+{
+  "description": "AP placement for commercial corridors",
+  "ap_type": "directional_high_capacity",
+  "coverage_radius_ft": 500
+}
