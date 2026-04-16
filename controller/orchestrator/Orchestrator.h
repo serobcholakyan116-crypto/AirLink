@@ -11,6 +11,7 @@
 
 #include <atomic>
 #include <memory>
+#include <string>
 
 class Orchestrator {
 private:
@@ -21,7 +22,7 @@ private:
     Optimizer optimizer;
     DigitalTwin twin;
 
-    // Southbound + execution
+    // Southbound
     std::unique_ptr<DeviceAdapter> adapter;
     std::unique_ptr<Scheduler> scheduler;
 
@@ -29,8 +30,20 @@ private:
     NetworkState state;
     std::atomic<bool> running;
 
+    // Config
+    std::string unifi_url;
+    std::string unifi_key;
+    bool use_unifi;
+
+    // Internal helpers
+    void sendStateToCloud();
+
 public:
     Orchestrator();
+
+    void configure(bool enable_unifi,
+                   const std::string& url = "",
+                   const std::string& key = "");
 
     void initialize();
     void run();
