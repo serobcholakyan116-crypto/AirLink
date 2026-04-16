@@ -82,3 +82,25 @@ AirLink is positioned to meet the growing demand for free, secure, and reliable 
 
 
 By combining robust engineering with a streamlined user experience, AirLink delivers a wireless access solution that is both powerful and accessible—making it an attractive choice for organizations seeking modern connectivity infrastructure.
+# Citywide Montebello Wi‑Fi – Controller & Planning
+
+This repo models a municipal Wi‑Fi controller for a hypothetical
+citywide network (`Montebello-Free-WiFi`).
+
+- `config/` – SSID, RF, firewall, rate limits, network policy
+- `planning/` – AP placement, RF plans, capacity estimates
+- `controller/` – orchestration, telemetry, optimization, digital twin
+- `scripts/` – coverage simulation, channel planning, config loading
+
+The controller loop (`Orchestrator`) ingests synthetic telemetry,
+scores APs, classifies interference, proposes channel changes, and
+prints scheduled actions.
+
+This is an architectural and modeling project, not a deployment guide.
+
+
+If you paste those in, you’ll have a repo that:
+
+• Builds a binary (controller_main)
+• Runs a live control loop (on synthetic data)
+• Has configs + planning + scripts all aligned
