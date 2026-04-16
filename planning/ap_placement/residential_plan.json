@@ -1,0 +1,6 @@
+{
+  "description": "AP placement for residential neighborhoods",
+  "pole_spacing_ft": 300,
+  "ap_type": "outdoor_dualband",
+  "coverage_radius_ft": 350
+}
