@@ -1,13 +1,17 @@
-cmake_minimum_required(VERSION 3.10)
-project(AirLink)
+cmake_minimum_required(VERSION 3.16)
+project(citywide_montebello_wifi CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
-include_directories(src)
+add_subdirectory(controller)
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-
-add_executable(AirLink ${SOURCES})
-
-
-(This already auto‑includes the new SIM files because they’re in src/.)
+add_executable(controller_main main.cpp)
+target_link_libraries(controller_main
+    orchestrator
+    telemetry
+    optimizer
+    spectrum
+    interference
+    digital_twin
+    scheduler
+)
