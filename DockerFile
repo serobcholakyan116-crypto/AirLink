@@ -1,0 +1,28 @@
+# ---------- Build Stage ----------
+FROM ubuntu:22.04 AS builder
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY . .
+
+RUN cmake -S . -B build \
+    && cmake --build build --parallel
+
+# ---------- Runtime Stage ----------
+FROM ubuntu:22.04
+
+WORKDIR /app
+
+# Copy compiled binary only (smaller image)
+COPY --from=builder /app/build /app/build
+
+# Optional: copy configs
+COPY config/ /app/config/
+
+EXPOSE 8080
+
+CMD ["./build/controller_app"]
